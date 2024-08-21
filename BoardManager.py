@@ -37,10 +37,11 @@ class BoardManager:
                     tempboard[i][j] = Cell()
         return tempboard
     
-    def getBoard(self) -> List[List[Cell]]:
+    def getBoard(self) -> list[list[Cell]]:
         return self.board
     
-    def updateBoard(self, (i, j): Tuple[int]) -> None:
+    def updateBoard(self, t: tuple[int]) -> bool:
+        i, j = t
         if not self.board[i][j].isMine and not self.board[i][j].isVisited:
             self.board[i][j].isVisited = True
             self.cells_unvisited -=1
@@ -48,17 +49,18 @@ class BoardManager:
         else:
             print("Tried to visit a mine or already visited cell")
             exit(1)
-    def calculateMineCount(self, (i1, j1): Tuple[int]) -> int:
-       mineCount = 0
-       indices = [-1, 0, 1]
-       m = len(self.board)
-       n = len(self.board[0])
-       for i in indices:
-        for j in indices:
-            if i1 + i in range(0, m) and j1 + j in range(0, n):
-                if self.board[i1+i][j1+j].isMine:
-                    mineCount += 1
-        return mineCount
+    def calculateMineCount(self, t: tuple[int]) -> int:
+        i1, j1 = t
+        mineCount = 0
+        indices = [-1, 0, 1]
+        m = len(self.board)
+        n = len(self.board[0])
+        for i in indices:
+            for j in indices:
+                if i1 + i in range(0, m) and j1 + j in range(0, n):
+                    if self.board[i1+i][j1+j].isMine:
+                        mineCount += 1
+            return mineCount
 
         
 

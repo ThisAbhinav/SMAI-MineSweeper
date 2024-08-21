@@ -9,18 +9,19 @@ class GameManager:
         if cell.isMine:
             return "U"
         return str(cell)
-    def displayBoard(self, board: List[List[str]]) -> None:
+    def displayBoard(self, board: list[list[str]]) -> None:
         for i in board:
             for j in i: 
                 print(j, end=" ")
             print()
-    def maskBoard(self, board: List[List[Cell]]) -> List[List[str]]:
+    def maskBoard(self, board: list[list[Cell]]) -> list[list[str]]:
         maskedBoard = [["" for j in range(len(board[0]))] for i in range(len(board))]
         for i in range(len(board)):
             for j in range(len(board[0])):
                 maskedBoard[i][j] = maskCell(board[i][j])
 
-    def isMoveValid(self, (i, j): Tuple[int]) -> bool:
+    def isMoveValid(self, t: tuple[int]) -> bool:
+        i,j = t
         return not realBoard[i][j].isMine
 
     def play(self) -> bool:
