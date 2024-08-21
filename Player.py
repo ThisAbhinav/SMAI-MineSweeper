@@ -1,6 +1,7 @@
 class Player:
     def __init__(self):
-        pass 
+        pass
+
     def makeMove(self, board: list[list[str]]):
         while True:
             try:

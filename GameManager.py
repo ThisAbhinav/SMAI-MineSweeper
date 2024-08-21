@@ -23,7 +23,7 @@ class GameManager:
             for j in i:
                 print(j, end=" ")
             print()
-            
+
     def maskBoard(self, board: list[list[Cell]]) -> list[list[str]]:
         maskedBoard = [["" for j in range(len(board[0]))] for i in range(len(board))]
         for i in range(len(board)):
@@ -34,8 +34,6 @@ class GameManager:
     def isMoveValid(self, t: tuple[int], realBoard: list[list[Cell]]) -> bool:
         i, j = t
         return not realBoard[i][j].isMine
-
-
 
     def play(self) -> bool:
         correctVisits = 0
