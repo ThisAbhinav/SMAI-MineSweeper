@@ -1,6 +1,4 @@
 import random
-
-
 class BoardManager:
     def __init__(self, size: int, noOfMines) -> None:
         self.board = self.generateRandomBoard(size, noOfMines)
