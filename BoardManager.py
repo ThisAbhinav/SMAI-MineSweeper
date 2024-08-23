@@ -35,7 +35,7 @@ class BoardManager:
             mines.append((i // size, i % size))
         for i in range(size):
             for j in range(size):
-                if (i, j) in minelocations:
+                if (i, j) in mines:
                     tempboard[i][j] = Cell(True)
                 else:
                     tempboard[i][j] = Cell()
@@ -65,4 +65,4 @@ class BoardManager:
                 if i1 + i in range(0, m) and j1 + j in range(0, n):
                     if self.board[i1 + i][j1 + j].isMine:
                         mineCount += 1
-            return mineCount
+        return mineCount
