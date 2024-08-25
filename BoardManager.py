@@ -50,7 +50,6 @@ class BoardManager:
 
     def updateBoard(self, t: tuple[int]) -> bool:
         i, j = t
-        print(i, j)
         if not self.board[i][j].isMine and not self.board[i][j].isVisited:
             self.board[i][j].isVisited = True
             self.cells_unvisited -= 1

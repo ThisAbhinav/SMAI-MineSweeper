@@ -10,8 +10,12 @@ class GameManager:
     def __init__(self, size: int, noMines: int, mode: str = "ai") -> None:
 
         self.boardManager = BoardManager(size, noMines)
-
-        self.player = AIPlayer() if mode == "ai" else Player()
+        self.size = size
+        self.noMines = noMines
+        self.player = AIPlayer(size,noMines) if mode == "ai" else Player(size,noMines)
+        print("Game Initialized.")
+        print(f"Config: \n Grid Size: {self.size}x{self.size} \n No. of Mines: {self.noMines} \n Mode: {mode}")
+        
 
     def maskCell(self, cell: Cell) -> str:
 
@@ -25,10 +29,10 @@ class GameManager:
 
         print("   ", end=" ")
 
-        print(" ".join([str(i) for i in range(len(realBoard[0]))]))
+        print(" ".join([str(i) for i in range(self.size)]))
         print("   ", end=" ")
 
-        print(" ".join(["_" for i in range(len(realBoard[0]))]))
+        print(" ".join(["_" for i in range(self.size)]))
 
         for index, i in enumerate(realBoard):
 
@@ -43,10 +47,10 @@ class GameManager:
 
         print("   ", end=" ")
 
-        print(" ".join([str(i) for i in range(len(realBoard[0]))]))
+        print(" ".join([str(i) for i in range(self.size)]))
         print("   ", end=" ")
 
-        print(" ".join(["_" for i in range(len(realBoard[0]))]))
+        print(" ".join(["_" for i in range(self.size)]))
 
         for index, i in enumerate(realBoard):
 
@@ -60,11 +64,11 @@ class GameManager:
 
     def maskBoard(self, board: list[list[Cell]]) -> list[list[str]]:
 
-        maskedBoard = [["" for j in range(len(board[0]))] for i in range(len(board))]
+        maskedBoard = [["" for j in range(self.size)] for i in range(self.size)]
 
-        for i in range(len(board)):
+        for i in range(self.size):
 
-            for j in range(len(board[0])):
+            for j in range(self.size):
 
                 maskedBoard[i][j] = self.maskCell(board[i][j])
 
@@ -90,8 +94,6 @@ class GameManager:
             if self.isMoveValid(move, realBoard):
                 indices = [-1, 0, 1]
                 queue = [move]
-                m = len(realBoard)
-                n = len(realBoard[0])
                 while queue:
                     move = queue.pop(0)
                     if not realBoard[move[0]][move[1]].isVisited:
@@ -103,8 +105,8 @@ class GameManager:
                             for j in indices:
                                 newMove = (move[0] + i, move[1] + j)
                                 if (
-                                    newMove[0] in range(0, m)
-                                    and newMove[1] in range(0, n)
+                                    newMove[0] in range(0, self.size)
+                                    and newMove[1] in range(0, self.size)
                                     and not realBoard[newMove[0]][newMove[1]].isVisited
                                 ):
                                     print("New move:", newMove)

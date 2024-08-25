@@ -1,6 +1,7 @@
 class Player:
-    def __init__(self):
-        pass
+    def __init__(self, size: int, noMines: int):
+        self.size = size
+        self.noMines = noMines
 
     def makeMove(self, board: list[list[str]]):
         while True:
