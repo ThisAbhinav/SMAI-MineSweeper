@@ -12,10 +12,11 @@ class GameManager:
         self.boardManager = BoardManager(size, noMines)
         self.size = size
         self.noMines = noMines
-        self.player = AIPlayer(size,noMines) if mode == "ai" else Player(size,noMines)
+        self.player = AIPlayer(size, noMines) if mode == "ai" else Player(size, noMines)
         print("Game Initialized.")
-        print(f"Config: \n Grid Size: {self.size}x{self.size} \n No. of Mines: {self.noMines} \n Mode: {mode}")
-        
+        print(
+            f"Config: \n Grid Size: {self.size}x{self.size} \n No. of Mines: {self.noMines} \n Mode: {mode}"
+        )
 
     def maskCell(self, cell: Cell) -> str:
 
