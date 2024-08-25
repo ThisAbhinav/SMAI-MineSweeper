@@ -1,5 +1,6 @@
 from GameManager import GameManager
 
+
 def main():
     gameManager = GameManager(3, 4, "ai")
     gameManager.startPlay()
