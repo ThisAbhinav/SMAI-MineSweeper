@@ -1,15 +1,24 @@
 import random as rand
+
+
 class AIPlayer:
     def __init__(self):
         self.sentences = []
 
     def makeMove(self, board: list[list[str]]):
         try:
-            if input("AI Playing... Press anything to continue... [q for quitting]: ") == 'q':
+            if (
+                input("AI Playing... Press anything to continue... [q for quitting]: ")
+                == "q"
+            ):
                 exit(1)
-            move = (0,0)
-            if len(self.sentences) == 0:
+            move = (0, 0)
+            if len(self.sentences) == 0: # add condition when random move is to be made
                 move = self.makeRandomMove(board)
+                print("No inferences can be made random move taken!")
+                self.sentences.append(move)
+            else:
+                move = self.makeSmartMove(board)
                 self.sentences.append(move)
             print(f"AI chose to move: {move}")
             if board[move[0]][move[1]] != "U":
@@ -23,7 +32,20 @@ class AIPlayer:
 
     def makeRandomMove(self, board: list[list[str]]):
         while True:
-            move = (rand.choice([*range(len(board))]), rand.choice([*range(len(board))]))
+            move = (
+                rand.choice([*range(len(board))]),
+                rand.choice([*range(len(board))]),
+            )
+            if board[move[0]][move[1]] == "U":
+                break
+        return move
+
+    def makeSmartMove(self, board: list[list[str]]):
+        while True:
+            move = (
+                rand.choice([*range(len(board))]),
+                rand.choice([*range(len(board))]),
+            )
             if board[move[0]][move[1]] == "U":
                 break
         return move
