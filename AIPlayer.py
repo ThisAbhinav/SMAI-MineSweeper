@@ -1,4 +1,4 @@
-class Player:
+class AIPlayer:
     def __init__(self):
         pass
 

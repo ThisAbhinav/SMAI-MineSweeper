@@ -26,6 +26,10 @@ class BoardManager:
             exit(1)
         self.board = self.generateRandomBoard(size, noOfMines)
         self.cells_unvisited = size * size - noOfMines
+        for i in range(size):
+            for j in range(size):
+                if not self.board[i][j].isMine:
+                    self.board[i][j].adjMineCount = self.calculateMineCount((i, j))
 
     def generateRandomBoard(self, size: int, noOfMines: int) -> list[list[Cell]]:
         tempboard = [[0 for i in range(size)] for j in range(size)]
@@ -46,10 +50,10 @@ class BoardManager:
 
     def updateBoard(self, t: tuple[int]) -> bool:
         i, j = t
+        print(i,j)
         if not self.board[i][j].isMine and not self.board[i][j].isVisited:
             self.board[i][j].isVisited = True
             self.cells_unvisited -= 1
-            self.board[i][j].adjMineCount = self.calculateMineCount((i, j))
         else:
             print("Tried to visit a mine or already visited cell")
             exit(1)
