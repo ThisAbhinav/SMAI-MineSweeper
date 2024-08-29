@@ -125,3 +125,4 @@ class GameManager:
                 print("Correctly visited cells:", correctVisits)
                 exit(1)
         print("All cells visited. Player wins.")
+        self.displayRealBoard(realBoard)
