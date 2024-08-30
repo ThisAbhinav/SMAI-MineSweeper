@@ -7,12 +7,9 @@ class Sentence:
     def __init__(self, cells: set, mines: int):
         self.cells = cells
         self.mines = mines
-        
+
     def __len__(self):
         return len(self.cells)
-    
-    
-    # overload operator here for sexy sexy union and difference operations
 
     def __str__(self):
         return f"{self.cells} : {self.mines}"
@@ -23,20 +20,19 @@ class AIPlayer:
         self.size = size
         self.noMines = noMines
         self.minesDetected = set()
-        
+
     def printSentences(self, sentences: set[Sentence]) -> None:
         for sentence in sentences:
             print(sentence)
 
-    
     def makeMove(self, board: list[list[str]]) -> tuple:
         try:
-            if (
-                input("AI Playing... Press anything to continue... [q for quitting]: ")
-                == "q"
-            ):
-                exit(1)
-            # make inference!
+            # if (
+            #     input("AI Playing... Press anything to continue... [q for quitting]: ")
+            #     == "q"
+            # ):
+            #     exit(1)
+            # # make inference!
             move = self.makeSmartMove(board)
 
             if not move:
@@ -75,19 +71,20 @@ class AIPlayer:
                     minesCount = 0
                     for x in indices:
                         for y in indices:
-                            if ((x == 0 and y == 0) or (
+                            if (x == 0 and y == 0) or (
                                 i + x < 0
                                 or i + x >= self.size
                                 or j + y < 0
                                 or j + y >= self.size
-                            )):
+                            ):
                                 continue
                             elif (i + x, j + y) in self.minesDetected:
                                 minesCount += 1
                                 continue
                             elif board[i + x][j + y] == "U":
                                 sentence.add((i + x, j + y))
-                    if len(sentence): sentences.add(Sentence(sentence, int(board[i][j])-minesCount))
+                    if len(sentence):
+                        sentences.add(Sentence(sentence, int(board[i][j]) - minesCount))
         self.printSentences(sentences)
         safeMoves = set()
         # make inferences from sentences
@@ -96,7 +93,9 @@ class AIPlayer:
             InferenceMade = False
             for sentence in sentences:
                 for otherSentence in sentences:
-                    if sentence != otherSentence and sentence.cells.issubset(otherSentence.cells):
+                    if sentence != otherSentence and sentence.cells.issubset(
+                        otherSentence.cells
+                    ):
                         otherSentence.cells = otherSentence.cells - sentence.cells
                         otherSentence.mines = otherSentence.mines - sentence.mines
                         InferenceMade = True
