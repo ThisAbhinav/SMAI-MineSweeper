@@ -44,7 +44,7 @@ class GameManager:
             for j in i:
                 print(j, end=" ")
             print()
-        
+
     def maskBoard(self, board: list[list[Cell]]) -> list[list[str]]:
 
         maskedBoard = [["" for j in range(self.size)] for i in range(self.size)]
