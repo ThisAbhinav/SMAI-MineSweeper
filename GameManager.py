@@ -153,4 +153,6 @@ class GameManager:
             return None
 
     def getBoard(self):
-        return self.boardManager.getBoard()
+        realBoard =  self.boardManager.getBoard()
+        maskedBoard = self.maskBoard(realBoard)
+        return maskedBoard
