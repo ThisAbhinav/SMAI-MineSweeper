@@ -1,5 +1,5 @@
 import random as rand
-
+from rich import print
 from typing import Optional
 
 
@@ -37,9 +37,9 @@ class AIPlayer:
 
             if not move:
                 move = self.makeRandomMove(board)
-                print("No inferences can be made random move taken!")
+                print("[blue]No inferences can be made random move taken!")
             else:
-                print("Inferences made!")
+                print("[green]Inferences made!")
             print(f"AI chose to move: {move}")
             if board[move[0]][move[1]] != "U":
                 print("Already Visited!")
@@ -66,7 +66,7 @@ class AIPlayer:
         sentences = set()
         for i in range(self.size):
             for j in range(self.size):
-                if board[i][j] != "U" and board[i][j] != "0":
+                if board[i][j] not in ["U", "T", "0"]:
                     sentence = set()
                     minesCount = 0
                     for x in indices:
@@ -116,3 +116,7 @@ class AIPlayer:
         # can choose any safe move actually # maybe for optimization we can store this but not required for now.
         else:
             return None
+    def informMine(self, move: list[int]) ->  bool:
+        move = tuple(move)
+        self.minesDetected.add(move)
+        return True

@@ -3,7 +3,7 @@ class Player:
         self.size = size
         self.noMines = noMines
 
-    def makeMove(self, board: list[list[str]]):
+    def makeMove(self, board: list[list[str]]) -> list[int]:
         while True:
             try:
                 move = input("Enter your move (i, j) [q for quiting]: ")
@@ -21,3 +21,6 @@ class Player:
                 else:
                     break
         return move
+
+    def informMine(self, move: list[int]) -> bool:
+        return True

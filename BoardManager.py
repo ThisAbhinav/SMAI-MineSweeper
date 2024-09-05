@@ -6,9 +6,12 @@ class Cell:
         self.isMine = isMine
         self.isVisited = False
         self.adjMineCount = 0
+        self.isVisitedMine = False
 
     def __str__(self) -> str:
-        if self.isMine:
+        if self.isVisitedMine:
+            return "T"
+        elif self.isMine:
             return "M"
         elif self.isVisited:
             return str(self.adjMineCount)
@@ -56,6 +59,12 @@ class BoardManager:
         else:
             print("Tried to visit a mine or already visited cell")
             exit(1)
+
+    def markVisitedMine(self, t: tuple[int]) -> bool:
+        i, j = t 
+        if self.board[i][j].isMine and not self.board[i][j].isVisitedMine:
+            self.board[i][j].isVisitedMine = True 
+            self.board[i][j].isVisited = True
 
     def calculateMineCount(self, t: tuple[int]) -> int:
         i1, j1 = t
