@@ -117,10 +117,10 @@ class GameManager:
             return False
         else:
             realBoard = self.boardManager.getBoard()
-            # print("Real Board")
-            # self.displayMaskedBoard(realBoard)
+            print("Real Board")
+            self.displayMaskedBoard(realBoard)
             maskedBoard = self.maskBoard(realBoard)
-            st.table(maskedBoard)
+            # st.table(maskedBoard)
             print("Masked Board")
             self.displayMaskedBoard(maskedBoard)
             move = self.player.makeMove(maskedBoard)
@@ -155,3 +155,6 @@ class GameManager:
                 print("Player hit a mine. Game over.")
                 print("Correctly visited cells:", self.correctVisits)
                 exit(1)
+
+    def getBoard(self):
+        return self.boardManager.getBoard()

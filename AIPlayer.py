@@ -60,7 +60,7 @@ class AIPlayer:
                 break
         return move
 
-    def makeSmartMove(self, board: list[list[str]]) -> Optional[tuple]:
+    def makeSmartMove(self, board: list[list[str]]) -> tuple | None:
 
         indices = [-1, 0, 1]
         sentences = set()
