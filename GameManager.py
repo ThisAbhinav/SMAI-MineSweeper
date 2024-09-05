@@ -106,6 +106,7 @@ class GameManager:
             # self.displayBoard(realBoard)
             maskedBoard = self.maskBoard(realBoard)
             # st.table(maskedBoard)
+            # st.table(maskedBoard)
             print("Masked Board")
             self.displayBoard(maskedBoard)
             move = self.player.makeMove(maskedBoard)
@@ -150,3 +151,6 @@ class GameManager:
                 print("Number of mines hit:", self.minesHit)
                 exit(1)
             return None
+
+    def getBoard(self):
+        return self.boardManager.getBoard()
