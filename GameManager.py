@@ -9,18 +9,20 @@ from typing import Optional
 
 class GameManager:
 
-    def __init__(self, size: int, noMines: int, mode: str = "ai") -> None:
+    def __init__(self, size: int, noMines: int, mode: str = "ai", verbose = True) -> None:
 
         self.boardManager = BoardManager(size, noMines)
         self.size = size
         self.noMines = noMines
-        self.player = AIPlayer(size, noMines) if mode == "ai" else Player(size, noMines)
+        self.player = AIPlayer(size, noMines, verbose) if mode == "ai" else Player(size, noMines, verbose)
         self.correctVisits = 0
         self.minesHit = 0
-        print("Game Initialized.")
-        print(
-            f"Config: \n Grid Size: {self.size}x{self.size} \n No. of Mines: {self.noMines} \n Mode: {mode.upper()}"
-        )
+        self.verbose = verbose
+        if self.verbose:
+            print("Game Initialized.")
+            print(
+                f"Config: \n Grid Size: {self.size}x{self.size} \n No. of Mines: {self.noMines} \n Mode: {mode.upper()}"
+            )
 
     def maskCell(self, cell: Cell) -> str:
 
@@ -74,11 +76,12 @@ class GameManager:
         self.displayBoard(self.boardManager.getBoard())
         print("Number of mines hit:", self.minesHit)
 
-    def startPlay(self) -> dict:
+    def startPlay(self, startMove: tuple[int]) -> dict:
         totalVisits = self.boardManager.cells_unvisited
         while self.correctVisits < totalVisits:
-            self.nextMove()
-        self.displayWinMsg()
+            self.nextMove(startMove)
+        if self.verbose:
+            self.displayWinMsg()
         results = self.getResults()
         return results
     
@@ -98,8 +101,9 @@ class GameManager:
 
         return results
 
-    def nextMove(self) -> Optional[dict]:
-        print("Next Move")
+    def nextMove(self, startMove: tuple[int]) -> Optional[dict]:
+        if self.verbose:
+            print("Next Move")
         if self.boardManager.cells_unvisited == 0:
             self.displayWinMsg()
             results = self.getResults()
@@ -111,9 +115,12 @@ class GameManager:
             maskedBoard = self.maskBoard(realBoard)
             # st.table(maskedBoard)
             # st.table(maskedBoard)
-            print("Masked Board")
-            self.displayBoard(maskedBoard)
-            move = self.player.makeMove(maskedBoard)
+            if self.verbose:
+                print("Masked Board")
+                self.displayBoard(maskedBoard)
+            move = self.player.makeMove(maskedBoard, startMove)
+            if self.verbose:
+                print("Making Move:", move)
             if self.isUnvisitedSafe(move, realBoard):
                 indices = [-1, 0, 1]
                 queue = [move]
@@ -132,7 +139,8 @@ class GameManager:
                                     and newMove[1] in range(0, self.size)
                                     and not realBoard[newMove[0]][newMove[1]].isVisited
                                 ):
-                                    print("New move:", newMove)
+                                    if self.verbose:
+                                        print("New move:", newMove)
                                     self.boardManager.updateBoard(newMove)
                                     realBoard = self.boardManager.getBoard()
                                     self.correctVisits += 1
@@ -143,16 +151,18 @@ class GameManager:
                                         queue.append(newMove)
                     continue
             elif self.isMoveMine(move, realBoard):
-                print("[red]Player hit a mine. The game must go on!")
+                if self.verbose:
+                    print("[red]Player hit a mine. The game must go on!")
                 self.boardManager.markVisitedMine(move)
                 self.minesHit += 1
                 self.player.informMine(move)
                 
                 # exit(1)
             else:
-                print("Player hit an invalid move. Game over.")
-                print("Correctly visited cells:", correctVisits)
-                print("Number of mines hit:", self.minesHit)
+                if self.verbose:
+                    print("Player hit an invalid move. Game over.")
+                    print("Correctly visited cells:", correctVisits)
+                    print("Number of mines hit:", self.minesHit)
                 exit(1)
             return None
 
@@ -168,11 +178,13 @@ class GameManager:
         visited = [[False]*self.size for i in range(self.size)]
         visited[startMove[0]][startMove[1]] = True
         while queue:
-            print("[green]Number of elements in queue:", len(queue))
+            if self.verbose:
+                print("[green]Number of elements in queue:", len(queue))
             realBoard = self.boardManager.getBoard()
             currentMove = queue.pop(0)
             x, y = currentMove
-            print("[blue]Taking Move:", currentMove)
+            if self.verbose:
+                print("[blue]Taking Move:", currentMove)
             if self.isUnvisitedSafe(currentMove, realBoard):
                 self.boardManager.updateBoard(currentMove)
                 self.correctVisits += 1
@@ -191,9 +203,11 @@ class GameManager:
                         
             realBoard = self.boardManager.getBoard()
             maskedBoard = self.maskBoard(realBoard)
-            print("Masked Board:")
-            self.displayBoard(maskedBoard)
-        print("[red]Queue is empty. BFS over.")
+            if self.verbose:
+                print("Masked Board:")
+                self.displayBoard(maskedBoard)
+        if self.verbose:
+            print("[red]Queue is empty. BFS over.")
         results = self.getResults()
         return results
 
@@ -203,11 +217,13 @@ class GameManager:
         visited = [[False]*self.size for i in range(self.size)]
         visited[startMove[0]][startMove[1]] = True
         while stack:
-            print("[green]Number of elements in stack:", len(stack))
+            if self.verbose:
+                print("[green]Number of elements in stack:", len(stack))
             realBoard = self.boardManager.getBoard()
             currentMove = stack.pop()
             x, y = currentMove
-            print("[blue]Taking Move:", currentMove)
+            if self.verbose:
+                print("[blue]Taking Move:", currentMove)
             if self.isUnvisitedSafe(currentMove, realBoard):
                 self.boardManager.updateBoard(currentMove)
                 self.correctVisits += 1
@@ -226,8 +242,10 @@ class GameManager:
                         
             realBoard = self.boardManager.getBoard()
             maskedBoard = self.maskBoard(realBoard)
-            print("Masked Board:")
-            self.displayBoard(maskedBoard)
-        print("[red]Stack is empty. BFS over.")
+            if self.verbose:
+                print("Masked Board:")
+                self.displayBoard(maskedBoard)
+        if self.verbose:
+            print("[red]Stack is empty. BFS over.")
         results = self.getResults()
         return results

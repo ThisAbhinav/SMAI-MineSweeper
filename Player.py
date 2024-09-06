@@ -1,9 +1,10 @@
 class Player:
-    def __init__(self, size: int, noMines: int):
+    def __init__(self, size: int, noMines: int, verbose: str):
         self.size = size
         self.noMines = noMines
+        self.verbose = verbose
 
-    def makeMove(self, board: list[list[str]]) -> list[int]:
+    def makeMove(self, board: list[list[str]], startMove: tuple[int]) -> list[int]:
         while True:
             try:
                 move = input("Enter your move (i, j) [q for quiting]: ")

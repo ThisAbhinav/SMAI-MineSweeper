@@ -16,16 +16,18 @@ class Sentence:
 
 
 class AIPlayer:
-    def __init__(self, size: int, noMines: int):
+    def __init__(self, size: int, noMines: int, verbose: str):
         self.size = size
         self.noMines = noMines
         self.minesDetected = set()
+        self.movesMade = 0
+        self.verbose = verbose
 
     def printSentences(self, sentences: set[Sentence]) -> None:
         for sentence in sentences:
             print(sentence)
 
-    def makeMove(self, board: list[list[str]]) -> tuple:
+    def makeMove(self, board: list[list[str]], startMove: tuple[int]) -> tuple:
         try:
             # if (
             #     input("AI Playing... Press anything to continue... [q for quitting]: ")
@@ -33,21 +35,27 @@ class AIPlayer:
             # ):
             #     exit(1)
             # # make inference!
-            move = self.makeSmartMove(board)
-
-            if not move:
-                move = self.makeRandomMove(board)
-                print("[blue]No inferences can be made random move taken!")
+            if self.movesMade == 0:
+                move = startMove
             else:
-                print("[green]Inferences made!")
-            print(f"AI chose to move: {move}")
-            if board[move[0]][move[1]] != "U":
-                print("Already Visited!")
-                exit(1)
+                move = self.makeSmartMove(board)
+                if not move:
+                    move = self.makeRandomMove(board)
+                    if self.verbose:
+                        print("[blue]No inferences can be made random move taken!")
+                else:
+                    if self.verbose:
+                        print("[green]Inferences made!")
+                if self.verbose:
+                    print(f"AI chose to move: {move}")
+                if board[move[0]][move[1]] != "U":
+                    print("Already Visited!")
+                    exit(1)
         except Exception as e:
             print(e)
             print("Invalid Position.")
             exit(1)
+        self.movesMade += 1
         return move
 
     def makeRandomMove(self, board: list[list[str]]) -> tuple:
@@ -85,7 +93,8 @@ class AIPlayer:
                                 sentence.add((i + x, j + y))
                     if len(sentence):
                         sentences.add(Sentence(sentence, int(board[i][j]) - minesCount))
-        self.printSentences(sentences)
+        if self.verbose:
+            self.printSentences(sentences)
         safeMoves = set()
         # make inferences from sentences
         InferenceMade = True
@@ -108,8 +117,9 @@ class AIPlayer:
                     for cell in sentence.cells:
                         self.minesDetected.add(cell)
                     sentences.remove(sentence)
-        print("Mines Detected: ", self.minesDetected)
-        print("Safe Moves Detected: ", safeMoves)
+        if self.verbose:
+            print("Mines Detected: ", self.minesDetected)
+            print("Safe Moves Detected: ", safeMoves)
         # fill safe moves
         if safeMoves:
             return safeMoves.pop()
