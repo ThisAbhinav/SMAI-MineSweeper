@@ -36,7 +36,7 @@ class BoardManager:
 
     def generateRandomBoard(self, size: int, noOfMines: int) -> list[list[Cell]]:
         tempboard = [[0 for i in range(size)] for j in range(size)]
-        minelocations = random.choices(range(size * size), k=noOfMines)
+        minelocations = random.sample(range(size * size), k=noOfMines)
         mines = []
         for i in minelocations:
             mines.append((i // size, i % size))

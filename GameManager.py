@@ -85,14 +85,18 @@ class GameManager:
     def getResults(self) -> dict:
         safeCellsVisited = self.size**2 - self.noMines
         totalCellsVisited = self.correctVisits + self.minesHit
-        return {
+        
+        results = {
             "total_safe_cells": self.size**2 - self.noMines,
             "safe_cells_visited": self.correctVisits,
             "mines_hit": self.minesHit,
             "total_mines": self.noMines,
             "total_cells_visited": totalCellsVisited,
-
         }
+
+        results["victory"] = results["total_safe_cells"] == results["safe_cells_visited"]
+
+        return results
 
     def nextMove(self) -> Optional[dict]:
         print("Next Move")
@@ -156,3 +160,74 @@ class GameManager:
         realBoard =  self.boardManager.getBoard()
         maskedBoard = self.maskBoard(realBoard)
         return maskedBoard
+
+    def BFS(self, startMove: tuple[int]) -> dict:
+        # does BFS on the board
+        queue = [startMove]
+        indices = [-1, 0, 1]
+        visited = [[False]*self.size for i in range(self.size)]
+        visited[startMove[0]][startMove[1]] = True
+        while queue:
+            print("[green]Number of elements in queue:", len(queue))
+            realBoard = self.boardManager.getBoard()
+            currentMove = queue.pop(0)
+            x, y = currentMove
+            print("[blue]Taking Move:", currentMove)
+            if self.isUnvisitedSafe(currentMove, realBoard):
+                self.boardManager.updateBoard(currentMove)
+                self.correctVisits += 1
+                for i in indices:
+                    for j in indices:
+                        newMove = (x + i, y + j)
+                        i1, j1 = newMove
+                        if i1 in range(0, self.size) and j1 in range(0, self.size) and not visited[i1][j1]:
+                            queue.append(newMove)
+                            visited[i1][j1] = True
+            elif self.isMoveMine(currentMove, realBoard):
+                self.boardManager.markVisitedMine(currentMove)
+                self.minesHit += 1
+                # not appending to queue
+            
+                        
+            realBoard = self.boardManager.getBoard()
+            maskedBoard = self.maskBoard(realBoard)
+            print("Masked Board:")
+            self.displayBoard(maskedBoard)
+        print("[red]Queue is empty. BFS over.")
+        results = self.getResults()
+        return results
+
+    def DFS(self, startMove: tuple[int]) -> bool:
+        stack = [startMove]
+        indices = [-1, 0, 1]
+        visited = [[False]*self.size for i in range(self.size)]
+        visited[startMove[0]][startMove[1]] = True
+        while stack:
+            print("[green]Number of elements in stack:", len(stack))
+            realBoard = self.boardManager.getBoard()
+            currentMove = stack.pop()
+            x, y = currentMove
+            print("[blue]Taking Move:", currentMove)
+            if self.isUnvisitedSafe(currentMove, realBoard):
+                self.boardManager.updateBoard(currentMove)
+                self.correctVisits += 1
+                for i in indices:
+                    for j in indices:
+                        newMove = (x + i, y + j)
+                        i1, j1 = newMove
+                        if i1 in range(0, self.size) and j1 in range(0, self.size) and not visited[i1][j1]:
+                            stack.append(newMove)
+                            visited[i1][j1] = True
+            elif self.isMoveMine(currentMove, realBoard):
+                self.boardManager.markVisitedMine(currentMove)
+                self.minesHit += 1
+                # not appending to stack
+            
+                        
+            realBoard = self.boardManager.getBoard()
+            maskedBoard = self.maskBoard(realBoard)
+            print("Masked Board:")
+            self.displayBoard(maskedBoard)
+        print("[red]Stack is empty. BFS over.")
+        results = self.getResults()
+        return results
