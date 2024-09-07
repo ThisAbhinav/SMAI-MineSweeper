@@ -64,7 +64,7 @@ def generate_board_figure(board, last_move=None):
 
 def main():
 
-    st.title("Minesweeper")
+    st.title("Minesweeper AI")
     if "status" not in st.session_state:
         st.session_state["status"] = "Game Over"
         
@@ -77,11 +77,22 @@ def main():
         st.session_state["gameManager"] = gameManager
         if st.button("Start Game"):
             st.session_state["status"] = "Playing"
-            
+            board = st.session_state["gameManager"].getBoard()
+            fig = generate_board_figure(board)
+            empty = st.empty()
+            with empty.container():
+                st.plotly_chart(fig, use_container_width=True)
+                        
     if st.session_state["status"] == "Playing" and st.button("Next Move"):
         gameManager = st.session_state["gameManager"]
         st.write(
-            f"Config: \n Grid Size: {gameManager.size}x{gameManager.size} \n No. of Mines: {gameManager.noMines}"
+            f"Grid Size: {gameManager.size}x{gameManager.size}"
+        )
+        st.write(
+            f"No. of Mines: {gameManager.noMines}"
+        )
+        st.write(
+            f"Heuristic Method"
         )
         st.session_state["gameManager"].nextMove((0,0))
         board = st.session_state["gameManager"].getBoard()
