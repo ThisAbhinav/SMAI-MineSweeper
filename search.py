@@ -6,7 +6,7 @@ from rich import print
 # resultsDFS = gameManager.DFS((0, 0))
 
 # # Run BFS
-gameManager = GameManager(5, 3, "ai", False)
+gameManager = GameManager(6, 30, "ai", False)
 resultsBFS = gameManager.BFS((0, 0))
 
 # Run Best Search First

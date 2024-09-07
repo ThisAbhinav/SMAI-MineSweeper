@@ -83,14 +83,13 @@ def main():
         st.write(
             f"Config: \n Grid Size: {gameManager.size}x{gameManager.size} \n No. of Mines: {gameManager.noMines}"
         )
-        st.session_state["gameManager"].nextMove()
+        st.session_state["gameManager"].nextMove((0,0))
         board = st.session_state["gameManager"].getBoard()
 
         fig = generate_board_figure(board)
         empty = st.empty()
         with empty.container():
             st.plotly_chart(fig, use_container_width=True)
-            st.table(board) # temporary dev only
 
 
 if __name__ == "__main__":
