@@ -5,7 +5,7 @@ from rich import print
 from Player import Player
 import streamlit as st
 from typing import Optional
-
+import random as rand
 
 class GameManager:
 
@@ -171,17 +171,31 @@ class GameManager:
         maskedBoard = self.maskBoard(realBoard)
         return maskedBoard
 
+    def makeRandomMove(self, board: list[list[str]]) -> tuple:
+        while True:
+            move = (
+                rand.choice([*range(len(board))]),
+                rand.choice([*range(len(board))]),
+            )
+            if board[move[0]][move[1]] == "U":
+                break
+        return move
+
     def BFS(self, startMove: tuple[int]) -> dict:
         # does BFS on the board
         queue = [startMove]
         indices = [-1, 0, 1]
         visited = [[False]*self.size for i in range(self.size)]
         visited[startMove[0]][startMove[1]] = True
-        while queue:
+        totalVisits = self.boardManager.cells_unvisited
+        while self.correctVisits <totalVisits :
             if self.verbose:
                 print("[green]Number of elements in queue:", len(queue))
             realBoard = self.boardManager.getBoard()
-            currentMove = queue.pop(0)
+            if len(queue) == 0:
+                currentMove = self.makeRandomMove(self.maskBoard(realBoard))
+            else:
+                currentMove = queue.pop(0)
             x, y = currentMove
             if self.verbose:
                 print("[blue]Taking Move:", currentMove)
@@ -216,11 +230,15 @@ class GameManager:
         indices = [-1, 0, 1]
         visited = [[False]*self.size for i in range(self.size)]
         visited[startMove[0]][startMove[1]] = True
-        while stack:
+        totalVisits = self.boardManager.cells_unvisited
+        while self.correctVisits < totalVisits:
             if self.verbose:
                 print("[green]Number of elements in stack:", len(stack))
             realBoard = self.boardManager.getBoard()
-            currentMove = stack.pop()
+            if len(stack) == 0:
+                currentMove = self.makeRandomMove(self.maskBoard(realBoard))
+            else:
+                currentMove = stack.pop()
             x, y = currentMove
             if self.verbose:
                 print("[blue]Taking Move:", currentMove)
