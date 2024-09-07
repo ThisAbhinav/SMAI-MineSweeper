@@ -13,4 +13,8 @@ The report can be found at `report.pdf`
 - Use `search.py` to play around with the parameters and display different statistics.
 - Use `main.py` if you want to visualize the game using Streamlit.
 
+## Images
+![Sliders](images/image-2.png)
+![Minesweeper Board](images/image-3.png)
+
 Have fun!
